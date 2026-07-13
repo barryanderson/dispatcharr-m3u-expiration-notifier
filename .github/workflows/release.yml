@@ -1,0 +1,67 @@
+name: Release
+
+# Push a tag like "v1.1.0" to build the plugin zip and publish it as a
+# GitHub Release asset, matching the download URL format used in manifest.json.
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Derive version and zip name
+        id: vars
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "zip_name=m3u_expiration_notifier-${VERSION}.zip" >> "$GITHUB_OUTPUT"
+
+      - name: Verify versions match the tag
+        run: |
+          TAG_VERSION="${{ steps.vars.outputs.version }}"
+          JSON_VERSION=$(python3 -c "import json; print(json.load(open('plugin.json'))['version'])")
+          PY_VERSION=$(grep -m1 -oP '(?<=version = ")[^"]+' plugin.py)
+
+          echo "Tag version:         $TAG_VERSION"
+          echo "plugin.json version: $JSON_VERSION"
+          echo "plugin.py version:   $PY_VERSION"
+
+          if [ "$TAG_VERSION" != "$JSON_VERSION" ] || [ "$TAG_VERSION" != "$PY_VERSION" ]; then
+            echo "::error::Version mismatch -- tag=$TAG_VERSION plugin.json=$JSON_VERSION plugin.py=$PY_VERSION. Refusing to build a release where the tag, plugin.json, and plugin.py disagree."
+            exit 1
+          fi
+
+      - name: Build release zip
+        run: |
+          mkdir -p build/m3u_expiration_notifier
+          cp plugin.py plugin.json logo.png build/m3u_expiration_notifier/
+          cd build/m3u_expiration_notifier
+          zip -r "../../${{ steps.vars.outputs.zip_name }}" plugin.py plugin.json logo.png
+
+      - name: Compute checksum
+        id: checksum
+        run: |
+          SHA256=$(sha256sum "${{ steps.vars.outputs.zip_name }}" | cut -d ' ' -f1)
+          {
+            echo "### Release checksum"
+            echo ""
+            echo '```'
+            echo "\"latest_sha256\": \"$SHA256\""
+            echo '```'
+            echo ""
+            echo "Paste this into manifest.json's latest_sha256 field, commit, and push."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.vars.outputs.zip_name }}
+          generate_release_notes: true

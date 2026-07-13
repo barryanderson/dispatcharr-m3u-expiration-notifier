@@ -1,0 +1,21 @@
+# Runtime state written by the plugin at /data/plugins/<key>/state.json
+# (mirrored here if the plugin is ever run/tested from this checkout)
+state.json
+state.json.tmp
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Packaged release artefacts (built from plugin.py + plugin.json, not source)
+*.zip
+
+# Editor/OS cruft
+.DS_Store
+.vscode/
+.idea/
+
+# Claude
+CLAUDE.md
+.claude

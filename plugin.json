@@ -1,0 +1,150 @@
+{
+  "name": "M3U Expiration Notifier",
+  "version": "1.0.0",
+  "description": "Checks your M3U account expiration dates on a schedule and emails you before (and when) they expire.",
+  "author": "banderson",
+  "help_url": "",
+  "fields": [
+    {
+      "id": "info_schedule",
+      "type": "info",
+      "label": "Check Schedule"
+    },
+    {
+      "id": "check_interval_hours",
+      "type": "number",
+      "label": "Check Interval (hours)",
+      "default": 24,
+      "min": 0.01,
+      "help_text": "How often to check M3U account expiration dates, in hours. Default is 24 (once per day). Decimals are accepted (e.g. 0.0167 ≈ 1 minute) for testing; the practical minimum is ~30 seconds. After changing this, run the 'Apply Schedule' action for the new interval to take effect immediately."
+    },
+    {
+      "id": "info_thresholds",
+      "type": "info",
+      "label": "Notification Thresholds"
+    },
+    {
+      "id": "warning_days",
+      "type": "string",
+      "label": "Warn X Days Before Expiration",
+      "default": "30,14,7,3,1",
+      "placeholder": "30,14,7,3,1",
+      "help_text": "Comma-separated list of day thresholds. An email is sent the first time a check finds an account within one of these windows of expiring. An email is also always sent once when an account has fully expired."
+    },
+    {
+      "id": "info_email",
+      "type": "info",
+      "label": "Email Notification"
+    },
+    {
+      "id": "notify_email",
+      "type": "string",
+      "label": "Notify Email Address(es)",
+      "placeholder": "you@example.com, other@example.com",
+      "help_text": "Comma-separated list of recipient email addresses."
+    },
+    {
+      "id": "info_smtp",
+      "type": "info",
+      "label": "SMTP Server Settings"
+    },
+    {
+      "id": "smtp_host",
+      "type": "string",
+      "label": "SMTP Host",
+      "placeholder": "smtp.gmail.com"
+    },
+    {
+      "id": "smtp_port",
+      "type": "number",
+      "label": "SMTP Port",
+      "default": 587
+    },
+    {
+      "id": "smtp_security",
+      "type": "select",
+      "label": "Connection Security",
+      "default": "starttls",
+      "options": [
+        {"value": "starttls", "label": "STARTTLS"},
+        {"value": "ssl", "label": "SSL/TLS"},
+        {"value": "none", "label": "None"}
+      ]
+    },
+    {
+      "id": "smtp_username",
+      "type": "string",
+      "label": "SMTP Username"
+    },
+    {
+      "id": "smtp_password",
+      "type": "string",
+      "label": "SMTP Password",
+      "input_type": "password"
+    },
+    {
+      "id": "smtp_from_email",
+      "type": "string",
+      "label": "From Address",
+      "placeholder": "Defaults to SMTP username",
+      "help_text": "Optional. Leave blank to use the SMTP username as the From address."
+    },
+    {
+      "id": "info_smtp_verify",
+      "type": "info",
+      "label": "Verify Your Settings",
+      "help_text": "These settings aren't checked automatically. After entering them, switch to the Actions tab and run 'Validate SMTP Connection' (quick, no email sent) or 'Send Test Email' (sends a real email) to confirm they work."
+    }
+  ],
+  "actions": [
+    {
+      "id": "check_now",
+      "label": "Check Expirations Now",
+      "description": "Immediately check all M3U account expiration dates and send email notifications for any that are due, based on current settings.",
+      "button_label": "Check Now",
+      "button_variant": "filled",
+      "button_color": "blue"
+    },
+    {
+      "id": "validate_smtp",
+      "label": "Validate SMTP Connection",
+      "description": "Connects to your SMTP server and logs in (if a username is set) without sending any email. A quick way to confirm your settings before sending a real test email.",
+      "button_label": "Validate Connection",
+      "button_variant": "outline"
+    },
+    {
+      "id": "send_test_email",
+      "label": "Send Test Email",
+      "description": "Sends a real test email to your configured recipient address(es) using the current SMTP settings. Confirms delivery end-to-end: your mail provider accepts and delivers the message, not just that the connection works.",
+      "button_label": "Send Test Email",
+      "button_variant": "outline"
+    },
+    {
+      "id": "apply_schedule",
+      "label": "Apply Schedule",
+      "description": "Re-creates the periodic background check using the current Check Interval setting. Run this after changing the interval.",
+      "button_label": "Apply Schedule",
+      "button_variant": "outline"
+    },
+    {
+      "id": "scheduler_status",
+      "label": "Scheduler Status",
+      "description": "Shows when the next background expiration check is due to run, based on the check interval and the time of the last completed check.",
+      "button_label": "Scheduler Status",
+      "button_variant": "outline"
+    },
+    {
+      "id": "reset_state",
+      "label": "Reset Notification State",
+      "description": "Clears the record of which thresholds have already been notified for each profile. Use this after changing thresholds if an account isn't getting a new email because a since-removed threshold was already notified for it.",
+      "button_label": "Reset Notification State",
+      "button_variant": "outline",
+      "button_color": "red",
+      "confirm": {
+        "required": true,
+        "title": "Reset Notification State?",
+        "message": "This will clear all notification history. The next check will re-send emails for any profile currently within a configured threshold."
+      }
+    }
+  ]
+}

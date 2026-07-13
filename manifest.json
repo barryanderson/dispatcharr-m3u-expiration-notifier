@@ -1,0 +1,19 @@
+{
+  "registry_name": "M3U Expiration Notifier",
+  "registry_url": "https://github.com/barryanderson/dispatcharr-m3u-expiration-notifier",
+  "plugins": [
+    {
+      "slug": "m3u_expiration_notifier",
+      "name": "M3U Expiration Notifier",
+      "description": "Checks your M3U account expiration dates on a schedule and emails you before (and when) they expire.",
+      "author": "banderson",
+      "license": "MIT",
+      "deprecated": false,
+      "repo_url": "https://github.com/barryanderson/dispatcharr-m3u-expiration-notifier",
+      "icon_url": "https://raw.githubusercontent.com/barryanderson/dispatcharr-m3u-expiration-notifier/master/logo.png",
+      "latest_version": "1.0.0",
+      "latest_url": "https://github.com/barryanderson/dispatcharr-m3u-expiration-notifier/releases/download/v1.0.0/m3u_expiration_notifier-1.0.0.zip",
+      "latest_sha256": "dae73b5be4f17d47da513b12d0ebeeae7da4ac20b8341a8f56957b658cfa3739"
+    }
+  ]
+}
