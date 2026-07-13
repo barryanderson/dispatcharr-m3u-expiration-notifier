@@ -6,7 +6,7 @@
       "slug": "m3u_expiration_notifier",
       "name": "M3U Expiration Notifier",
       "description": "Checks your M3U account expiration dates on a schedule and emails you before (and when) they expire.",
-      "author": "banderson",
+      "author": "barryanderson",
       "license": "MIT",
       "deprecated": false,
       "repo_url": "https://github.com/barryanderson/dispatcharr-m3u-expiration-notifier",

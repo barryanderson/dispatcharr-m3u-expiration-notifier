@@ -778,7 +778,7 @@ class Plugin:
     name = "M3U Expiration Notifier"
     version = "1.0.0"
     description = "Checks your M3U account expiration dates on a schedule and emails you before (and when) they expire."
-    author = "banderson"
+    author = "barryanderson"
     help_url = ""
 
     fields = [
